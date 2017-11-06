@@ -115,11 +115,11 @@ var OMDBfunc = function() {
 // do what it says function
 var doWhatItSaysFunc = function() {
 	fs.readFile("random.txt", "utf8", function(error, data) {
-	if (error) {
-		return console.log(error);
-	}
-	inputArr = data;
-	spotifyFunc();
+		if (error) {
+			return console.log(error);
+		}
+		inputArr = data;
+		spotifyFunc();
 	})
 }
 
