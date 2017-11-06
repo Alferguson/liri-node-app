@@ -4,7 +4,7 @@ var Twitter = require('twitter');
 var dataArr = [];
 var Spotify = require('node-spotify-api');
 var request = require('request');
-var fs = require("fs");
+var fs = require('fs');
 
 // twitter function
 var twitterFunc = function() {
@@ -14,7 +14,7 @@ var twitterFunc = function() {
 	  	access_token_key: '900160119119331328-hbzm6J3ltXdgWqRuSUbTJ7wfHgTc86w',
 	  	access_token_secret: 'MjDfHVLfToxFiy33v5tqsvqXXVWVoF6XHsESJ5FAt4kj2'
 	});
-	 
+	// parameters for twitter to select the dril account and limit to 10 posts 
 	var params = {
 		screen_name: 'dril',
 		count: 10
@@ -31,16 +31,15 @@ var twitterFunc = function() {
 	  	else {
 	  		console.log("meep");
 	  	}
+	  	// append to random.txt
 	    appendFunc();
 	});
-
 }
-
 
 // spotify function
 var spotifyFunc = function() {
 	spotifySong = inputArr;
-	// if user doesn't input a song, default to bad actors
+	// if user doesn't input a song, default to who let the dogs out
 	if (spotifySong == '') {
 		spotifySong = "Who let the dogs out?";
 	}
@@ -63,9 +62,9 @@ var spotifyFunc = function() {
 				console.log(data.tracks.items[i].name);
 				// preview link to song
 				console.log(data.tracks.items[i].preview_url);
-				// album song is fron 
+				// album song is from 
 				console.log(data.tracks.items[i].album.name);
-
+				// divider
 				console.log("----------------------");
 				dataArr.push(
 					data.tracks.items[i].artists[0].name, 
@@ -83,12 +82,12 @@ var spotifyFunc = function() {
 var OMDBfunc = function() { 
 	var movieName = '';
 	movieName = inputArr.join('+');
+	// if user doesn't input any movie, default to Trainspotting which is a great film
 	if (movieName == '') {
 		movieName = 'Trainspotting';
 	}
 	request("http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece", function(error, response, body) {
 	  	if (!error && response.statusCode === 200) {
-
 		    console.log(JSON.parse(body).Title);
 		    console.log(JSON.parse(body).Year);
 		    console.log(JSON.parse(body).imdbRating);
@@ -97,7 +96,7 @@ var OMDBfunc = function() {
 		    console.log(JSON.parse(body).Language);
 		    console.log(JSON.parse(body).Plot);
 		    console.log(JSON.parse(body).Actors);
-		    console.log("This is unrelated but you should def watch trainspotting");
+		    console.log("This is unrelated but you should def watch Trainspotting");
 		    dataArr.push(
 		    	JSON.parse(body).Title,
 			    JSON.parse(body).Year,
@@ -113,6 +112,7 @@ var OMDBfunc = function() {
 	});
 }	
 
+// do what it says function
 var doWhatItSaysFunc = function() {
 	fs.readFile("random.txt", "utf8", function(error, data) {
 	if (error) {
@@ -120,28 +120,19 @@ var doWhatItSaysFunc = function() {
 	}
 	inputArr = data;
 	spotifyFunc();
-
 	})
 }
+
 // function to append data to log.txt
 var appendFunc = function() {
 	fs.appendFile('log.txt', dataArr, 'utf8', function(error) {
-
-	  // If an error was experienced we say it.
-	  if (error) {
-	    console.log(error);
-	  }
-
-	  // If no error is experienced, we'll log the phrase "Content Added" to our node console.
-	  else {
-	    console.log("Content Added!");
-	  }
-
+		if (error) {
+			console.log(error);
+		}
 	});
 }
 // switch statement to get what is being run like twitter function
 switch (process.argv[2]) {
-
 	case 'my-tweets':
 		twitterFunc();
 		break;
